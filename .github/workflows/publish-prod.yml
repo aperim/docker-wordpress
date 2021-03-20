@@ -60,6 +60,7 @@ jobs:
               BUILD_DATE=${{ steps.prepare.outputs.build_date }}
               VCS_REF=${GITHUB_SHA::8}
               WORDPRESS_VERSION=${{ steps.prepare.outputs.version }}
+              MAX_UPLOAD=1024M
           tags: |
             aperimau/wordpress:${{ steps.prepare.outputs.version }}
             aperimau/wordpress:latest
