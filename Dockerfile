@@ -17,11 +17,12 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.version=$VERSION \
   org.label-schema.schema-version="1.0"
 
-RUN apt-get update && apt-get install -y \
-  libzstd-dev/stable \
+RUN apt-get update && \
+  apt-get install -y libzstd-dev/stable  && \
+  apt-get install -y libmagickwand-dev --no-install-recommends && \
   && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_mysql && \
+RUN docker-php-ext-install pdo_mysql imagick && \
   printf "memory_limit = ${MAX_MEMORY}\n\nupload_max_filesize = ${MAX_UPLOAD}\npost_max_size = ${MAX_UPLOAD} \nmax_file_uploads = ${MAX_UPLOAD}\n\nmax_input_time = ${MAX_TIME}\nmax_execution_time = ${MAX_TIME}\n\nmax_input_vars = 5000" > /usr/local/etc/php/conf.d/aperim.ini && \
   printf "extension=redis.so\nextension=igbinary.so\n" > /usr/local/etc/php/conf.d/redis.ini && \
 	a2enmod remoteip; \
@@ -30,4 +31,5 @@ RUN docker-php-ext-install pdo_mysql && \
 	} > /etc/apache2/conf-available/remoteip.conf; \
 	a2enconf remoteip && \
   yes | pecl install igbinary && \
-  yes | pecl install redis 
+  yes | pecl install redis && \
+  yes | pecl install imagick
