@@ -36,8 +36,8 @@ RUN apt-get update && \
   apt-get install -y libmagickwand-dev build-essential --no-install-recommends
 
 RUN mkdir -p /usr/src/php/ext/imagick; \
-    echo "Downloading https://github.com/Imagick/imagick/archive/${IMAGICK_VERSION}.tar.gz"; \
-    curl -fsSL https://github.com/Imagick/imagick/archive/${IMAGICK_VERSION}.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1
+    echo "Downloading https://github.com/Imagick/imagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz"; \
+    curl -fsSL https://github.com/Imagick/imagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1
 
 RUN docker-php-ext-install pdo_mysql imagick && \
   printf "memory_limit = \${PHP_MEMORY_LIMIT}\n\nupload_max_filesize = \${PHP_UPLOAD_MAX_FILESIZE}\npost_max_size = \${PHP_POST_MAX_SIZE} \nmax_file_uploads = \${PHP_MAX_FILE_UPLOADS}\n\nmax_input_time = \${PHP_MAX_INPUT_TIME}\nmax_execution_time = \${PHP_MAX_EXECUTION_TIME}\n\nmax_input_vars = \${PHP_MAX_INPUT_VARS}" > /usr/local/etc/php/conf.d/aperim.ini && \
