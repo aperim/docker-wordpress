@@ -1,12 +1,16 @@
-ARG WORDPRESS_VERSION=5.8.1
-ARG PHP_VERSION=7.4
+ARG WORDPRESS_VERSION=5.9
+ARG PHP_VERSION=8.1
 
 FROM wordpress:${WORDPRESS_VERSION}-php${PHP_VERSION}-apache
 
-ARG IMAGICK_VERSION=3.5.1
-ARG MAX_UPLOAD=256M
-ARG MAX_MEMORY=512M
-ARG MAX_TIME=180
+ARG IMAGICK_VERSION=3.7.0
+ARG PHP_MEMORY_LIMIT=512M
+ARG PHP_UPLOAD_MAX_FILESIZE=2048M
+ARG PHP_POST_MAX_SIZE=${PHP_UPLOAD_MAX_FILESIZE}
+ARG PHP_MAX_FILE_UPLOADS=${PHP_UPLOAD_MAX_FILESIZE}
+ARG PHP_MAX_EXECUTION_TIME=600
+ARG PHP_MAX_INPUT_TIME=${PHP_MAX_EXECUTION_TIME}
+ARG PHP_MAX_INPUT_VARS=5000
 
 LABEL org.opencontainers.image.source https://github.com/aperim/docker-wordpress
 LABEL org.label-schema.build-date=$BUILD_DATE \
@@ -28,7 +32,7 @@ RUN mkdir -p /usr/src/php/ext/imagick; \
     curl -fsSL https://github.com/Imagick/imagick/archive/${IMAGICK_VERSION}.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1
 
 RUN docker-php-ext-install pdo_mysql imagick && \
-  printf "memory_limit = ${MAX_MEMORY}\n\nupload_max_filesize = ${MAX_UPLOAD}\npost_max_size = ${MAX_UPLOAD} \nmax_file_uploads = ${MAX_UPLOAD}\n\nmax_input_time = ${MAX_TIME}\nmax_execution_time = ${MAX_TIME}\n\nmax_input_vars = 5000" > /usr/local/etc/php/conf.d/aperim.ini && \
+  printf "memory_limit = \${PHP_MEMORY_LIMIT}\n\nupload_max_filesize = \${PHP_UPLOAD_MAX_FILESIZE}\npost_max_size = \${PHP_POST_MAX_SIZE} \nmax_file_uploads = \${PHP_MAX_FILE_UPLOADS}\n\nmax_input_time = \${PHP_MAX_INPUT_TIME}\nmax_execution_time = \${PHP_MAX_EXECUTION_TIME}\n\nmax_input_vars = \${PHP_MAX_INPUT_VARS}" > /usr/local/etc/php/conf.d/aperim.ini && \
   printf "extension=redis.so\nextension=igbinary.so\n" > /usr/local/etc/php/conf.d/redis.ini && \
 	a2enmod remoteip; \
 	{ \
