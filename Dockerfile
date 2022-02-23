@@ -1,4 +1,4 @@
-ARG WORDPRESS_VERSION=5.9
+ARG WORDPRESS_VERSION=5.9.1
 ARG PHP_VERSION=8.1
 
 FROM wordpress:${WORDPRESS_VERSION}-php${PHP_VERSION}-apache
@@ -22,8 +22,8 @@ ENV PHP_MAX_INPUT_VARS=${PHP_MAX_INPUT_VARS}
 
 LABEL org.opencontainers.image.source https://github.com/aperim/docker-wordpress
 LABEL org.label-schema.build-date=$BUILD_DATE \
-  org.label-schema.name="Wordpress Apache with ModRewrite and PDO_MYSQL" \
-  org.label-schema.description="Wordpress Apache with ModRewrite and PDO_MYSQL" \
+  org.label-schema.name="Wordpress ${WORDPRESS_VERSION} Apache" \
+  org.label-schema.description="Wordpress ${WORDPRESS_VERSION} PHP ${PHP_VERSION} Apache with ModRewrite and PDO_MYSQL" \
   org.label-schema.url="https://github.com/aperim/docker-wordpress" \
   org.label-schema.vcs-ref=$VCS_REF \
   org.label-schema.vcs-url="https://github.com/aperim/docker-wordpress" \
