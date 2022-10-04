@@ -20,8 +20,10 @@ ENV PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME}
 ENV PHP_MAX_INPUT_TIME=${PHP_MAX_EXECUTION_TIME}
 ENV PHP_MAX_INPUT_VARS=${PHP_MAX_INPUT_VARS}
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN apt-get update && \
-  apt-get install -y libzstd-dev/stable=1.4.8+dfsg-2.1 && \
+  apt-get install -y libzstd-dev=1.4.8+dfsg-2.1 --no-install-recommends && \
   apt-get install -y libmagickwand-dev=8:6.9.11.60+dfsg-1.3 build-essential=12.9 --no-install-recommends && \
   mkdir -p /usr/src/php/ext/imagick; \
   echo "Downloading https://github.com/Imagick/imagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz"; \
