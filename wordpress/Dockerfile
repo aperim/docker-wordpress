@@ -20,17 +20,6 @@ ENV PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME}
 ENV PHP_MAX_INPUT_TIME=${PHP_MAX_EXECUTION_TIME}
 ENV PHP_MAX_INPUT_VARS=${PHP_MAX_INPUT_VARS}
 
-LABEL org.opencontainers.image.source https://github.com/aperim/docker-wordpress
-LABEL org.label-schema.build-date=$BUILD_DATE \
-  org.label-schema.name="Wordpress ${WORDPRESS_VERSION} Apache" \
-  org.label-schema.description="Wordpress ${WORDPRESS_VERSION} PHP ${PHP_VERSION} Apache with ModRewrite and PDO_MYSQL" \
-  org.label-schema.url="https://github.com/aperim/docker-wordpress" \
-  org.label-schema.vcs-ref=$VCS_REF \
-  org.label-schema.vcs-url="https://github.com/aperim/docker-wordpress" \
-  org.label-schema.vendor="Aperim" \
-  org.label-schema.version=$VERSION \
-  org.label-schema.schema-version="1.0"
-
 RUN apt-get update && \
   apt-get install -y libzstd-dev/stable=1.4.8+dfsg-2.1 && \
   apt-get install -y libmagickwand-dev=8:6.9.11.60+dfsg-1.3 build-essential=12.9 --no-install-recommends && \
@@ -51,3 +40,24 @@ RUN docker-php-ext-install pdo_mysql imagick && \
 
 RUN apt-get remove -y build-essential && \
   rm -rf /var/lib/apt/lists/*
+
+ARG BUILD_DESCRIPTION="WordPress version ${WORDPRESS_VERSION} with imagemagick and redis support"
+ARG BUILD_NAME="WordPress ${WORDPRESS_VERSION}"
+ARG BUILD_DATE
+ARG BUILD_REF
+ARG BUILD_REPOSITORY
+ARG BUILD_VERSION
+
+LABEL \
+    maintainer="Troy Kelly <troy@aperim.com>" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
+    org.opencontainers.image.vendor="Troy Kelly" \
+    org.opencontainers.image.authors="Troy Kelly <troy@aperim.com>" \
+    org.opencontainers.image.licenses="Apache-2.0" \
+    org.opencontainers.image.url="https://aperim.com" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
+    org.opencontainers.image.created=${BUILD_DATE} \
+    org.opencontainers.image.revision=${BUILD_REF} \
+    org.opencontainers.image.version=${BUILD_VERSION}
