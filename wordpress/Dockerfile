@@ -23,12 +23,12 @@ ENV PHP_MAX_INPUT_VARS=${PHP_MAX_INPUT_VARS}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update && \
-  apt-get install -y libzstd-dev=1.4.8+dfsg-2.1 --no-install-recommends && \
+  apt-get install -y libldb-dev=2:2.2.3-2~deb11u2 libldap-common=2.4.57+dfsg-3+deb11u1 libldap2-dev=2.4.57+dfsg-3+deb11u1 libzstd-dev=1.4.8+dfsg-2.1 --no-install-recommends && \
   apt-get install -y libmagickwand-dev=8:6.9.11.60+dfsg-1.3 build-essential=12.9 --no-install-recommends && \
   mkdir -p /usr/src/php/ext/imagick; \
   echo "Downloading https://github.com/Imagick/imagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz"; \
   curl -fsSL https://github.com/Imagick/imagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz | tar xvz -C "/usr/src/php/ext/imagick" --strip 1 && \
-  docker-php-ext-install pdo_mysql imagick && \
+  docker-php-ext-install ldap pdo_mysql imagick && \
   printf "memory_limit = \${PHP_MEMORY_LIMIT}\n\nupload_max_filesize = \${PHP_UPLOAD_MAX_FILESIZE}\npost_max_size = \${PHP_POST_MAX_SIZE} \nmax_file_uploads = \${PHP_MAX_FILE_UPLOADS}\n\nmax_input_time = \${PHP_MAX_INPUT_TIME}\nmax_execution_time = \${PHP_MAX_EXECUTION_TIME}\n\nmax_input_vars = \${PHP_MAX_INPUT_VARS}\n\n" > /usr/local/etc/php/conf.d/aperim.ini && \
   printf "extension=redis.so\nextension=igbinary.so\n" > /usr/local/etc/php/conf.d/redis.ini && \
   touch /usr/local/etc/php/conf.d/pear.ini && \
